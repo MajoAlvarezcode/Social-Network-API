@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose';
-import reactionsSchema from './Reactions';
-const thoughtsSchema = new Schema({
+const thoughtSchema = new Schema({
     thoughtText: {
         type: String,
         required: true,
@@ -10,24 +9,19 @@ const thoughtsSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: function () {
-            return this.createdAt.toLocaleString();
-        }
     },
     username: {
         type: String,
         required: true,
     },
-    reactions: [reactionsSchema], // Documento anidado con el esquema de reacciones
 }, {
     toJSON: {
         virtuals: true,
         getters: true, // Habilita getters para devolver el valor formateado
     },
+    id: false,
+    versionKey: false,
 });
-thoughtsSchema.virtual('reactionCount').get(function () {
-    return this.reactions.length;
-});
-// Initialize our User model
-const Thoughts = model('thoughts', thoughtsSchema);
-export default Thoughts;
+// Initialize our Thought model
+const Thought = model('thought', thoughtSchema);
+export default Thought;

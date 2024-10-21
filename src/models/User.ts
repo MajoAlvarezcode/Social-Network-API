@@ -42,10 +42,11 @@ const userSchema = new Schema<IUser>(
     // Here we are indicating that we want virtuals to be included with our response, overriding the default behavior
     toJSON: {
       virtuals: true,
+      
     },
 
     id: false,
-    
+    versionKey: false,
   }
 );
 

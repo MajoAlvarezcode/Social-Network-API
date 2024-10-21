@@ -1,15 +1,15 @@
-import { Schema, Document, model} from 'mongoose';
-import reactionsSchema from './Reactions';
+import { Schema, Document, model } from 'mongoose';
 
 
-interface IThoughts extends Document {
+
+interface IThought extends Document {
   username: string;
   thoughtText: string;
   createdAt: Date | string;
-  reactions: typeof reactionsSchema[];
+
 }
 
-const thoughtsSchema = new Schema<IThoughts>(
+const thoughtSchema = new Schema<IThought>(
   {
     thoughtText: {
       type: String,
@@ -19,31 +19,29 @@ const thoughtsSchema = new Schema<IThoughts>(
     },
     createdAt: {
       type: Date,
-        default: Date.now,
-        get: function(this: { createdAt: Date }): string {
-          return this.createdAt.toLocaleString(); 
-      }
-      
+      default: Date.now,
+
+
     },
     username: {
       type: String,
       required: true,
     },
-    reactions: [reactionsSchema], // Documento anidado con el esquema de reacciones
+
   }, {
-    toJSON: {
-      virtuals: true,
-      getters: true, // Habilita getters para devolver el valor formateado
-    },
-    
-  });
+  toJSON: {
+    virtuals: true,
+    getters: true, // Habilita getters para devolver el valor formateado
+   
+  },
+  id: false,
+  versionKey: false,
+
+});
 
 
-  thoughtsSchema.virtual('reactionCount').get(function (this: IThoughts) {
-    return this.reactions.length;
-  });
 
-// Initialize our User model
-const Thoughts = model('thoughts', thoughtsSchema);
+// Initialize our Thought model
+const Thought = model('thought', thoughtSchema);
 
-export default Thoughts;
+export default Thought;
