@@ -5,7 +5,11 @@ export const getThoughts = async (_req, res) => {
         // Formatea `createdAt` para todos los pensamientos
         const formattedThoughts = thoughts.map((thought) => ({
             ...thought.toObject(),
-            createdAt: thought.createdAt.toLocaleString() // Formato de fecha
+            createdAt: thought.createdAt.toLocaleString(), // Formato de fecha para el pensamiento
+            reactions: thought.reactions.map((reaction) => ({
+                ...reaction.toObject(),
+                createdAt: reaction.createdAt.toLocaleString(), // Formato de fecha para cada reacción
+            })),
         }));
         res.json(formattedThoughts);
     }
@@ -87,39 +91,39 @@ export const deleteThought = async (req, res) => {
     }
     return;
 };
-// // Add a video response
-// export const addVideoResponse = async (req: Request, res: Response) => {
-//     try {
-//         const video = await Video.findOneAndUpdate(
-//             { _id: req.params.videoId },
-//             { $addToSet: { responses: req.body } },
-//             { runValidators: true, new: true }
-//         );
-//         if (!video) {
-//             return res.status(404).json({ message: 'No video with this id!' });
-//         }
-//         res.json(video);
-//         return;
-//     } catch (err) {
-//         res.status(500).json(err);
-//         return;
-//     }
-// }
-// // Remove video response
-// export const removeVideoResponse = async (req: Request, res: Response) => {
-//     try {
-//         const video = await Video.findOneAndUpdate(
-//             { _id: req.params.videoId },
-//             { $pull: { reactions: { responseId: req.params.responseId } } },
-//             { runValidators: true, new: true }
-//         )
-//         if (!video) {
-//             return res.status(404).json({ message: 'No video with this id!' });
-//         }
-//         res.json(video);
-//         return;
-//     } catch (err) {
-//         res.status(500).json(err);
-//         return;
-//     }
-// }
+// Add a thought reaction
+export const addThoughtReaction = async (req, res) => {
+    try {
+        const thought = await Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $addToSet: { reactions: req.body } }, { runValidators: true, new: true });
+        if (!thought) {
+            return res.status(404).json({ message: 'No thought found with this id!' });
+        }
+        res.json({
+            message: 'Reaction successfully added',
+            thought,
+        });
+        return;
+    }
+    catch (err) {
+        res.status(500).json(err);
+        return;
+    }
+};
+// Remove a thought response
+export const removeThoughtReaction = async (req, res) => {
+    try {
+        const thought = await Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $pull: { reactions: { reactionId: req.params.reactionId } } }, { runValidators: true, new: true });
+        if (!thought) {
+            return res.status(404).json({ message: 'No thought found with this id!' });
+        }
+        res.json({
+            message: 'Reaction successfully deleted',
+            thought,
+        });
+        return;
+    }
+    catch (err) {
+        res.status(500).json(err);
+        return;
+    }
+};

@@ -67,3 +67,54 @@ export const deleteUser = async (req, res) => {
     }
     return;
 };
+// Add a friend
+export const addFriend = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId); // Verifica que el usuario exista
+        const friend = await User.findById(req.params.friendId); // Verifica que el amigo exista
+        if (!user) {
+            return res.status(404).json({ message: `No user found with id ${req.params.userId}!` });
+        }
+        if (!friend) {
+            return res.status(404).json({ message: `No friend found with id ${req.params.friendId}!` });
+        }
+        const updatedUser = await User.findOneAndUpdate({ _id: req.params.userId }, { $addToSet: { friends: req.params.friendId } }, // Agrega el ID del amigo al array `friends`
+        { runValidators: true, new: true });
+        res.json({
+            message: 'Friend successfully added',
+            friend: updatedUser,
+        });
+        return;
+    }
+    catch (err) {
+        res.status(500).json(err);
+        return;
+    }
+};
+// Delete a friend
+export const deleteFriend = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId); // Verifica que el usuario exista
+        const friend = await User.findById(req.params.friendId); // Verifica que el amigo exista
+        if (!user) {
+            return res.status(404).json({ message: `No user found with id ${req.params.userId}!` });
+        }
+        if (!friend) {
+            return res.status(404).json({ message: `No friend found with id ${req.params.friendId}!` });
+        }
+        const updatedUser = await User.findOneAndUpdate({ _id: req.params.userId }, { $pull: { friends: req.params.friendId } }, // Elimina el ID del amigo del array `friends`
+        { runValidators: true, new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'Friend not found in user\'s friend list!' });
+        }
+        res.json({
+            message: 'Friend successfully deleted',
+            friend: updatedUser,
+        });
+        return;
+    }
+    catch (err) {
+        res.status(500).json(err);
+        return;
+    }
+};

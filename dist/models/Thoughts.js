@@ -1,4 +1,27 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
+const reactionSchema = new Schema({
+    reactionId: {
+        type: Types.ObjectId,
+        default: () => new Types.ObjectId(), // Genera un nuevo ObjectId por defecto
+    },
+    reactionBody: {
+        type: String,
+        required: true,
+        maxlength: 280, // Máximo de 280 caracteres
+    },
+    username: {
+        type: String,
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
+}, {
+    toJSON: {
+        getters: true, // Habilita getters para devolver el valor formateado
+    },
+});
 const thoughtSchema = new Schema({
     thoughtText: {
         type: String,
@@ -14,6 +37,7 @@ const thoughtSchema = new Schema({
         type: String,
         required: true,
     },
+    reactions: [reactionSchema],
 }, {
     toJSON: {
         virtuals: true,

@@ -1,5 +1,5 @@
 import { Schema, Types } from 'mongoose';
-const reactionsSchema = new Schema({
+const reactionSchema = new Schema({
     reactionId: {
         type: Types.ObjectId,
         default: () => new Types.ObjectId(), // Genera un nuevo ObjectId por defecto
@@ -16,13 +16,11 @@ const reactionsSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: function () {
-            return this.createdAt.toLocaleString();
-        }
+        get: (createdAt) => createdAt.toLocaleString(),
     }
 }, {
     toJSON: {
         getters: true, // Habilita getters para devolver el valor formateado
     },
 });
-export default reactionsSchema;
+export default reactionSchema;

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router = Router();
-import { getThoughts, getSingleThought, createThought, updateThought, deleteThought } from '../../controllers/thoughtsController.js';
+import { getThoughts, getSingleThought, createThought, updateThought, deleteThought, addThoughtReaction, removeThoughtReaction } from '../../controllers/thoughtsController.js';
 
 
 // /api/thoughts
@@ -16,7 +16,12 @@ router
 .put(updateThought)    
 .delete(deleteThought)
 
+// /api/thoughts/:thoughtId/reactions
+router.route('/:thoughtId/reactions').post(addThoughtReaction);
 
+
+// /api/thoughts/:thoughtId/reactions/reactionId
+router.route('/:thoughtId/reactions/:reactionId').delete(removeThoughtReaction);
 
 
 export default router;
