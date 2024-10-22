@@ -21,6 +21,7 @@ const reactionSchema = new Schema({
     toJSON: {
         getters: true, // Habilita getters para devolver el valor formateado
     },
+    id: false,
 });
 const thoughtSchema = new Schema({
     thoughtText: {

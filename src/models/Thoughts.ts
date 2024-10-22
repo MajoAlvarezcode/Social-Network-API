@@ -41,6 +41,7 @@ const reactionSchema = new Schema<IReaction>(
       toJSON: {
         getters: true, // Habilita getters para devolver el valor formateado
       },
+      id: false,
       
     });
 
