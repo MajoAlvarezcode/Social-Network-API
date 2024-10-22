@@ -1,6 +1,9 @@
 
 # Social Network API
 
+## Walkthrough Video
+https://drive.google.com/drive/folders/19ajkvnGOHFj2ovzCYxpb5Wd8BcJo7uIY?usp=sharing
+
 ## Table of Contents
 - [Description](#description)
 - [Installation](#installation)
